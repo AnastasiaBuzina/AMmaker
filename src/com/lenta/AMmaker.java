@@ -10,6 +10,8 @@ package com.lenta;
 import java.awt.*;
 import java.awt.datatransfer.Clipboard;
 import java.awt.datatransfer.StringSelection;
+import java.awt.datatransfer.DataFlavor;
+import java.awt.datatransfer.UnsupportedFlavorException;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,7 +21,7 @@ public class AMmaker {
 
     public static void main(String[] args) {
 
-        String version = "1.0";
+        String version = "1.1";
         String input;
         String amVersion = "22";
         String n = "N";
@@ -37,7 +39,7 @@ public class AMmaker {
 
         while (true) {
 
-            System.out.println("Введите алкод");
+            System.out.println("Введите алкод или нажмите \"b\", чтобы вставить из буфера обмена");
 
             try {
                 input = reader.readLine();
@@ -46,20 +48,41 @@ public class AMmaker {
                 continue;
             }
 
-            if ("q".equals(input) | "quit".equals(input)) break;
+            if ("q".equals(input) | "й".equals(input)) break;
 
-            if ("v".equals(input) | "ver".equals(input) | "version".equals(input) ) {
-                System.out.println(version);
+            if ("v".equals(input) | "м".equals(input) ) {
+                System.out.println("Версия " + version);
                 continue;
             }
 
-            if ("h".equals(input) | "help".equals(input) | "р".equals(input) | "рудз".equals(input)) {
+            if ("h".equals(input) | "р".equals(input)) {
                 System.out.println("Программа формирует АМ на основе алкода. " +
-                        "Написана Бузиной А. в июне 2018 года, " +
-                        "предназначена исключительно для использования" +
+                        "Предназначена для использования" +
                         " в тестовой среде компании Лента. " +
-                        "V1.0");
+                        "Бузина А., 2018г.");
+                System.out.println("Горячие клавиши:\n" +
+                        "b - вставка алкода из буфера\n" +
+                        "v - версия\n" +
+                        "h - справка\n" +
+                        "q - выход");
+                System.out.println("Добавлено в V1.1:\n" +
+                        "чтение алкода из системного буфера обмена");
                 continue;
+            }
+
+            if ("b".equals(input) | "и".equals(input)) {
+                try {
+                    input = (String) clipboard.getContents(null).getTransferData(DataFlavor.stringFlavor);
+                    System.out.println("Введён алкод");
+                    System.out.println(input);
+                } catch (UnsupportedFlavorException e) {
+                    System.out.println("ошибка вставки из буфера UnsupportedFlavorException (загуглить!)");
+                } catch (IOException e) {
+                    System.out.println("ошибка вставки из буфера (IOException)");
+                } /*catch (ClassNotFoundException e) {
+                    System.out.println("ошибка чтения алкода ");
+                    e.printStackTrace();
+                }*/
             }
 
             try {
